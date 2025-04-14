@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chatbot Interface</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="./Utils/tailwind.config.js"></script>
+    <script type="module" src="./Components/chat-bot.js"></script>
+    <script type="module" src="./Utils/useDatpaService.js"></script>
+    <script type="module" src="./script.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+        }
+    </style>
+</head>
+<body class="bg-[#F3F3F3] min-h-screen flex flex-col h-screen">
+<div class="flex w-full">
+    <div class="flex flex-col h-screen">
+        <dynamic-navbar
+                class="w-full flex flex-col h-screen w-[60px] sm:w-[220px] lg:w-[506px] transition-all duration-300 bg-[#E1E5EB] dark:bg-[#2C2C2C]"
+                position="expanded"
+                transition-duration="300ms"
+        >
+            <seccion-create class="flex flex-col justify-center items-center pb-2 my-2 mx-2 flex-[1] border-b-2 border-[#BFBFBF] dark:border-[#3A3A3A] p-4">
+                <new-btn
+                        name="New chat"
+                        styles="px-6 py-3 text-lg rounded-xl hover:bg-orange-500 dark:hover:bg-orange-400"
+                        icon-class="fa-solid fa-circle-plus"
+                        button-class="bg-[#E67E22] dark:bg-orange-600 w-full max-w-full text-white justify-center flex text-center font-semibold font-opensans hover:bg-white dark:hover:bg-gray-700 hover:text-[#E67E22] dark:hover:text-white min-w-[80px] sm:w-[280px] max-w-[350px] flex-1 transition-all duration-300"
+                ></new-btn>
+            </seccion-create>
+            <seccion-carpetas class="flex flex-col gap-2 flex-[4] p-4">
+                <new-btn
+                        name="New folder"
+                        styles="px-6 py-3 text-lg rounded-xl"
+                        icon-class="fa-regular fa-folder-open"
+                        button-class="bg-[#E1E5EB] dark:bg-[#3A3A3A] w-full max-w-full text-black dark:text-white justify-center font-semibold font-opensans hover:bg-[#FBFBFB] dark:hover:bg-[#4A4A4A] min-w-[63px] sm:w-[270px] sm:w-full max-w-[270px]"
+                        icon-and-text="true"
+                ></new-btn>
+            </seccion-carpetas>
+            <seccion-historial class="flex flex-col gap-2 flex-[4] p-4">
+                <new-btn
+                        name="New folder"
+                        styles="px-6 py-3 text-lg rounded-xl"
+                        icon-class="fa-regular fa-bookmark"
+                        button-class="bg-[#E1E5EB] dark:bg-[#3A3A3A] w-full max-w-full text-black dark:text-white justify-center font-semibold font-opensans hover:bg-[#FBFBFB] dark:hover:bg-[#4A4A4A] min-w-[63px] sm:w-[270px] sm:w-full max-w-[270px]"
+                        icon-and-text="true"
+                ></new-btn>
+            </seccion-historial>
+            <seccion-footer class="flex flex-col gap-2 flex-[1] p-4">
+                <new-btn
+                        name="New folder"
+                        styles="px-6 py-3 text-lg rounded-xl"
+                        icon-class="fa-regular fa-circle-question fa-2xl"
+                        button-class="bg-[#E1E5EB] dark:bg-[#3A3A3A] w-full max-w-full text-black dark:text-white justify-start font-semibold font-opensans hover:bg-[#FBFBFB] dark:hover:bg-[#4A4A4A] min-w-[63px] sm:w-[270px] sm:w-full max-w-[270px]"
+                        icon-and-text="true"
+                ></new-btn>
+                <new-btn
+                        id="dark-mode-toggle"
+                        name="New folder"
+                        styles="px-6 py-3 text-lg rounded-xl"
+                        icon-class="fa-regular fa-moon fa-2xl"
+                        button-class="bg-[#E1E5EB] dark:bg-[#3A3A3A] w-full max-w-full text-black dark:text-white justify-start font-semibold font-opensans hover:bg-[#FBFBFB] dark:hover:bg-[#4A4A4A] min-w-[63px] sm:w-[270px] sm:w-full max-w-[270px]"
+                        icon-and-text="true"
+                ></new-btn>
+                <new-btn
+                        name="Settings"
+                        styles="px-6 py-3 text-lg rounded-xl"
+                        icon-class="fa-solid fa-gear fa-2xl"
+                        button-class="bg-[#E1E5EB] dark:bg-[#3A3A3A] w-full max-w-full text-black dark:text-white justify-start font-semibold font-opensans hover:bg-[#FBFBFB] dark:hover:bg-[#4A4A4A] min-w-[63px] sm:w-[270px] sm:w-full max-w-[270px]"
+                        icon-and-text="true"
+                ></new-btn>
+            </seccion-footer>
+        </dynamic-navbar>
+    </div>
+    <div class="flex flex-col flex-1 h-screen bg-white text-black dark:bg-gray-900 dark:text-white">
+        <div class="flex-1 overflow-y-auto p-4"></div>
+        <div class="flex">
+            <chat-input
+                    id="main-chat-input"
+                    placeholder="Ask what you want"
+                    initial-message="How can we help you?"
+                    class="bg-gray-100 text-black dark:bg-gray-800 dark:text-white"
+            ></chat-input>
+        </div>
+    </div>
+</div>
+</body>
+</html>
