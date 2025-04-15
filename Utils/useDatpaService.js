@@ -14,12 +14,14 @@ const iniciarNuevoChat = async (Message) => {
             return {error: true, message: "No se pudo crear el chat"}
         }
         const threadId = res.response.thread_id;
-        const messages = res.response.messages;
+        const messages = res.response.messages.sort((a, b) => new Date(a.created_at) - new Date(b.created_at));
         LocalStorageService.addChatToHistory(threadId,res);
         LocalStorageService.switchToChatSendMessage(res.response.thread_id);
         LocalStorageService.setMessagesThreadId(threadId,res.response.messages);
-        const assistantMessages = messages.filter(msg => msg.role === "assistant");
-        const lastAssistantMessage = assistantMessages[assistantMessages.length - 1];
+        const lastAssistantMessage = messages
+            .filter(msg => msg.role === "assistant")
+            .sort((a, b) => new Date(a.created_at) - new Date(b.created_at))
+            .pop();
         if (lastAssistantMessage) {
             renderAssistantResponse(lastAssistantMessage);
         }
