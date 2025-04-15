@@ -8,7 +8,6 @@ import { DaptaService } from "./DaptaService.js"
 const iniciarNuevoChat = async (Message) => {
     try {
         let chatActive = LocalStorageService.getActiveChat();
-        if (!chatActive) chatActive = '';
         const res = await DaptaService.createChat(chatActive,Message);
         if (!res) {
             console.error("Error in loading chat");
@@ -17,9 +16,7 @@ const iniciarNuevoChat = async (Message) => {
         const threadId = res.response.thread_id;
         const messages = res.response.messages;
         LocalStorageService.addChatToHistory(threadId,res);
-        if (chatActive === '' || !chatActive) {
-            LocalStorageService.switchToChat(threadId);
-        }
+        LocalStorageService.switchToChatSendMessage(res.response.thread_id);
         LocalStorageService.setMessagesThreadId(threadId,res.response.messages);
         const assistantMessages = messages.filter(msg => msg.role === "assistant");
         const lastAssistantMessage = assistantMessages[assistantMessages.length - 1];
