@@ -13,7 +13,7 @@ Here is an overview of the main files and their purposes:
   - **`new-btn.js`**: Component for creating new buttons with customizable functionality.
 - **`Utils/`**: Contains utility scripts for general use.
   - **`DaptaService.js`**: Handles communication with the DAPTA AI. It is used through the `useDaptaService` function.
-  - **`Utils-methods-data.js`**: A helper file for both `DaptaService` and other utility methods.
+  - **`localStorageService.js`**: A helper file for both `DaptaService` and other utility methods.
 - **`Popup.js`**: Currently under development. This file and the popup functionality are incomplete but can be extended using the existing project structure.
 ---
 
