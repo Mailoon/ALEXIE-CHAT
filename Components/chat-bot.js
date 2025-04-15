@@ -44,7 +44,7 @@ class ChatInput extends HTMLElement {
         const maxSizeTextArea = this.getAttribute("max-size-textarea") || 200;
         // Create the container
         this.className = "w-full max-w-3xl mx-auto my-4";
-        const showTitle = !localStorage.getItem("dapta_active_chat_id");
+        const showTitle = !localStorage.getItem("active_thread_id");
         // Create the HTML structure
         this.innerHTML = `
             <div class="flex flex-col w-full">
@@ -103,8 +103,11 @@ class ChatInput extends HTMLElement {
         const maxSizeTextArea = this.getAttribute("max-size-textarea") || 200;
         // Send button click
         this.sendButton.addEventListener("click", async () => {
+            const text = this.inputElement.value.trim();
+            if (!text) return;
+            renderNewUserMessage(text);
             await this.sendMessage();
-            this.inputElement.value = '';
+            this.inputElement.value = "";
         })
 
         // Stop button click
@@ -115,8 +118,11 @@ class ChatInput extends HTMLElement {
         // Enter key press in input
         this.inputElement.addEventListener("keypress", async (e) => {
             if (e.key === "Enter") {
+                const text = this.inputElement.value.trim();
+                if (!text) return;
+                renderNewUserMessage(text);
                 await this.sendMessage();
-                this.inputElement.value = '';
+                this.inputElement.value = "";
                 e.preventDefault();
             }
         })
@@ -149,19 +155,14 @@ class ChatInput extends HTMLElement {
     async sendMessage() {
         const message = this.inputElement.value.trim()
         if (!message || this.isProcessing) return
-
-        const nameChat = message.length > 20 ? message.substring(0, 20) : message
-        this.lastMessage = nameChat
-
-        // Cambiar a estado de procesamiento
+        this.lastMessage = message;
         this.setProcessingState(true)
 
         try {
-            const result = await iniciarNuevoChat(nameChat)
+            const result = await iniciarNuevoChat(message)
 
             if (result.success) {
                 console.log("Chat create success:", result)
-                // Puedes actualizar la UI aquí si quieres
             } else {
                 console.error("Fail in create the chat:", result.message)
             }
@@ -221,23 +222,6 @@ class ChatInput extends HTMLElement {
             this.inputElement.value = this.lastMessage;
             this.inputElement.disabled = false;
         }
-    }
-
-    /**
-     * Public method to reset the component
-     * Useful after changing chats or when starting the application
-     */
-    reset() {
-        this.setProcessingState(false)
-    }
-
-    /**
-     * Public method to change the placeholder
-     * @param {string} text - New placeholder text
-     */
-    setPlaceholder(text) {
-        this.placeholder = text
-        this.inputElement.placeholder = text
     }
 }
 
