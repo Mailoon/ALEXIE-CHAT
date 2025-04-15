@@ -157,10 +157,20 @@ class ChatInput extends HTMLElement {
         this.setProcessingState(true)
 
         try {
-            const result = await iniciarNuevoChat(nameChat)
+            let result;
+
+            if(localStorage.getItem("dapta_active_chat_id")) {
+                result = await enviarMensaje(nameChat, localStorage.getItem("dapta_active_chat_id"))
+                console.log("message sent success:", result)
+            }
+
+            else {
+                result = await iniciarNuevoChat(nameChat)
+                console.log("chat created success", result)
+            }
 
             if (result.success) {
-                console.log("Chat create success:", result)
+                console.log("action made with success", result)
                 // Puedes actualizar la UI aquí si quieres
             } else {
                 console.error("Fail in create the chat:", result.message)

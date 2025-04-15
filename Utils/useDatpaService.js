@@ -13,7 +13,10 @@ import {
  * @returns {Promise<Object>} Información del chat creado
  */
 const iniciarNuevoChat = async (nameChat) => {
+    
+    console.log("current thread", localStorage.getItem("dapta_current_thread"))
     try {
+
         // 1. Crear thread en Dapta
         const thread = await DaptaService.createChat()
         if (!thread) {
@@ -25,14 +28,17 @@ const iniciarNuevoChat = async (nameChat) => {
         const responseChatHistory = await DaptaService.createChatHistory(thread.id, nameChat)
 
         // 3. Guardar ID del thread
-        const threadId = responseChatHistory.value.item.thread_id;
+        var threadId = responseChatHistory.value.item.thread_id;
         saveThreadId(threadId);
         createNewChat(threadId, nameChat);
         console.log("responsChatHistory:", responseChatHistory)
 
+        console.log("threadId before sending the message:", threadId)
+
         // 4. Enviar primer mensaje
         const sendMessage = await DaptaService.sendMessage(nameChat, threadId)
         console.log("SendMessage:", sendMessage)
+        console.log("my threadId new chat:", threadId)
 
         // 5. Cargar mensajes
         const mensajes = await DaptaService.getMessages(threadId)
@@ -60,8 +66,10 @@ const iniciarNuevoChat = async (nameChat) => {
  */
 export const enviarMensaje = async (mensaje, threadId) => {
     try {
+        console.log("enviar mensaje top:", threadId)
         // Si no se proporciona un threadId, intentar obtener el activo
         if (!threadId) {
+            console.log("my threadId:", threadId)
             // Si no existe, intentamos obtener el chat activo
             if (!threadId) {
                 const activeChat = getActiveChat()
@@ -150,6 +158,7 @@ export const obtenerThreadActual = () => {
  * @returns {Promise<Object>} Resultado de la operación
  */
 export const cambiarChat = async (chatId) => {
+    console.log("cambiarChat :", chatId)
     try {
         const success = switchToChat(chatId)
         if (success) {
@@ -229,3 +238,4 @@ export const inicializarChat = async (mensajeInicial = "") => {
 }
 
 window.iniciarNuevoChat = iniciarNuevoChat;
+window.enviarMensaje = enviarMensaje;
