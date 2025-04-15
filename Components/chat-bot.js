@@ -7,7 +7,7 @@
  * - Send and stop buttons
  * - Automatic textarea size adjustment
  */
-class ChatInput extends HTMLElement {
+export class ChatInput extends HTMLElement {
     constructor() {
         super()
         this.isProcessing = false // Track if we're waiting for a response
@@ -92,6 +92,21 @@ class ChatInput extends HTMLElement {
         this.stopButton = this.querySelector(".stop-btn");
     }
 
+     updateTitle() {
+        const showTitle = !localStorage.getItem("active_thread_id");
+        const titleElement = this.querySelector("h2");
+
+        if (showTitle && !titleElement) {
+            const newTitle = document.createElement("h2");
+            newTitle.className = "text-2xl font-bold text-center mb-4 dark:text-gray-300";
+            newTitle.textContent = this.initialMessage;
+
+            this.insertBefore(newTitle, this.firstChild);
+        } else if (!showTitle && titleElement) {
+            titleElement.remove();
+        }
+    }
+
     /**
      * Sets up event listeners for interactive elements
      * - Send button: sends the message
@@ -159,12 +174,12 @@ class ChatInput extends HTMLElement {
         this.setProcessingState(true)
 
         try {
-            const result = await iniciarNuevoChat(message)
+            const res = await iniciarNuevoChat(message)
 
-            if (result.success) {
-                console.log("Chat create success:", result)
+            if (res.success) {
+                console.log("Chat create success:", res)
             } else {
-                console.error("Fail in create the chat:", result.message)
+                console.error("Fail in create the chat:", res.message)
             }
         } catch (error) {
             console.error("Error in crear new chat:", error)
@@ -226,4 +241,4 @@ class ChatInput extends HTMLElement {
 }
 
 // Register the custom element
-customElements.define("chat-input", ChatInput)
+customElements.define("chat-input", ChatInput);

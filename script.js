@@ -1,7 +1,7 @@
 // Import Components
 import "./Components/new-btn.js"
 import "./Components/navbar.js"
-import "./Components/chat-bot.js"
+import { ChatInput } from "./Components/chat-bot.js"
 import "./Components/Poppup.js"
 
 // Dark mode toggle
@@ -109,6 +109,7 @@ LocalStorageService.listeners.push((newChat) => {
 // Set initial theme based on localStorage or system preference
 document.addEventListener("DOMContentLoaded", async () => {
     // Check for saved theme preference or use system preference
+    const chatInputComponent = document.getElementById("main-chat-input");
     const darkModeToggle = document.getElementById("dark-mode-toggle")
 
     if (darkModeToggle) {
@@ -138,7 +139,12 @@ document.addEventListener("DOMContentLoaded", async () => {
     if (createNewChatbotButton) {
         createNewChatbotButton.addEventListener("click", () => {
             LocalStorageService.removeItem('active_thread_id');
-            LocalStorageService.switchToChat('');
+            chatInputComponent.updateTitle()
+            // 💡 Agrega esta línea para limpiar visualmente los mensajes
+            const chatContainer = document.getElementById("chat-messages-container");
+            if (chatContainer) {
+                chatContainer.innerHTML = "";
+            }
         });
     }
 

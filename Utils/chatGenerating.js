@@ -61,20 +61,26 @@ const renderAssistantMessage = (msg, { isNew = false } = {}) => {
 
     // Mensaje nuevo → mostrar animación de typing
     const typingEl = createTypingIndicator();
-    container.appendChild(wrapInFlex(typingEl));
+    const typingWrapper = wrapInFlex(typingEl);
+    container.appendChild(typingWrapper);
     container.scrollTop = container.scrollHeight;
 
     setTimeout(() => {
-        const finalEl = createMessageElement(msg, false);
-        finalEl.textContent = "";
+        const fullWrapper = createMessageElement(msg, false);
 
-        typingEl.parentElement.replaceWith(wrapInFlex(finalEl)); // Reemplaza el contenedor entero
+        // 🔍 Encontrar el bubble real dentro del wrapper
+        const bubble = fullWrapper.querySelector("div");
+
+        // 🧼 Limpiar el texto para animación tipo máquina de escribir
+        if (bubble) bubble.textContent = "";
+
+        typingWrapper.replaceWith(fullWrapper);
 
         const fullText = extractMessageText(msg);
         let i = 0;
 
         const typingInterval = setInterval(() => {
-            finalEl.textContent += fullText.charAt(i);
+            if (bubble) bubble.textContent += fullText.charAt(i);
             i++;
             container.scrollTop = container.scrollHeight;
             if (i >= fullText.length) clearInterval(typingInterval);
@@ -105,15 +111,12 @@ const renderNewUserMessage = (msg) => {
     const container = document.getElementById("chat-messages-container");
     if (!container) return;
 
-    const wrapper = document.createElement("div");
-    wrapper.className = "w-full flex justify-end mb-2";
+    const messageObject = typeof msg === "string"
+        ? { role: "user", content: [{ type: "text", text: { value: msg } }] }
+        : msg;
 
-    const bubble = document.createElement("div");
-    bubble.className = "max-w-xl px-4 py-2 rounded-t-lg rounded-bl-lg whitespace-pre-wrap bg-blue-500 text-white";
-    bubble.textContent = typeof msg === "string" ? msg : msg.content?.[0]?.text?.value || "";
-
-    wrapper.appendChild(bubble);
-    container.appendChild(wrapper);
+    const userEl = createMessageElement(messageObject, false);
+    container.appendChild(userEl);
     container.scrollTop = container.scrollHeight;
 };
 

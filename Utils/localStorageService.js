@@ -57,17 +57,21 @@ const LocalStorageService = {
     },
 
     switchToChat(chatId) {
+        const chatInputComponent = document.getElementById("main-chat-input");
         const chat = LocalStorageService.getAllChats().find(c => c.id === chatId);
 
         if (!chat) {
             console.warn("Chat no encontrado en el historial:", chatId);
             return;
         }
-        LocalStorageService.setActiveChat(chatId);
-        const messages = LocalStorageService.getMessages(chatId);
+        this.switchToChatSendMessage(chatId);
+        LocalStorageService.getMessages(chatId);
+        chatInputComponent.updateTitle()
         renderMessagesFromThread(chatId);
+    },
 
-        console.log(`🔄 Switched to chat: ${chatId}`);
+    switchToChatSendMessage(chatId) {
+        LocalStorageService.setActiveChat(chatId);
     },
 
     getAllChats() {
